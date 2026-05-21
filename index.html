@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>現場ログ</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0c0c0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="現場ログ">
+<link rel="apple-touch-icon" href="icon.svg">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0c0c0c;--s1:#141414;--s2:#1c1c1c;--border:#252525;--border2:#2e2e2e;
+  --gold:#c8a96e;--gold2:#e8c98e;--text:#ddd5c5;--sub:#999;--dim:#555;--dim2:#3a3a3a;
+  --red:#c0504d;--green:#5a9a6a;
+  --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);
+  --ff:'Georgia','Hiragino Mincho ProN','Yu Mincho',serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);min-height:100vh;overscroll-behavior:none}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* Header */
+.hdr{
+  padding:calc(14px + var(--st)) 18px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:var(--bg);z-index:20;
+  backdrop-filter:blur(10px);
+}
+.hdr-l{display:flex;align-items:center;gap:9px}
+.hdr-star{color:var(--gold);font-size:15px;line-height:1}
+.hdr-title{color:var(--text);font-size:15px;letter-spacing:.12em;font-weight:normal}
+.hdr-badge{
+  font-size:10px;color:var(--dim);border:1px solid var(--border2);
+  padding:3px 10px;border-radius:20px;letter-spacing:.06em;
+}
+
+/* Content */
+.content{flex:1;padding:18px 18px calc(74px + var(--sb));overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* Bottom nav */
+.bnav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  background:var(--s1);border-top:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding-bottom:var(--sb);z-index:20;
+}
+.nb{
+  background:none;border:none;color:var(--dim);
+  padding:10px 0 9px;font-size:9px;cursor:pointer;
+  font-family:var(--ff);letter-spacing:.05em;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:color .2s;
+}
+.nb.on{color:var(--gold)}
+.ni{font-size:16px;line-height:1}
+
+/* Animations */
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fi .22s ease}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* Typography */
+.dlabel{font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:14px;text-transform:uppercase}
+.slabel{font-size:10px;color:var(--dim);letter-spacing:.12em;margin-bottom:12px}
+
+/* Question card */
+.qcard{
+  background:var(--s1);border:1px solid var(--border);
+  border-left:2px solid var(--gold);
+  padding:15px 16px;margin-bottom:18px;display:flex;gap:11px;
+}
+.qm{color:var(--gold);font-size:12px;font-weight:bold;flex-shrink:0;margin-top:3px;letter-spacing:.05em}
+.qt{color:var(--text);font-size:13px;line-height:1.9}
+
+/* Textarea */
+textarea,input[type=text],input[type=password]{
+  width:100%;background:var(--s1);border:1px solid var(--border);
+  color:var(--text);font-family:var(--ff);font-size:13px;
+  line-height:1.85;padding:13px 14px;resize:vertical;
+  outline:none;border-radius:0;-webkit-appearance:none;
+  transition:border-color .2s;
+}
+textarea:focus,input:focus{border-color:var(--gold)}
+input[type=text],input[type=password]{resize:none}
+
+/* Buttons */
+.btn{
+  width:100%;background:var(--gold);border:none;color:#0c0c0c;
+  padding:12px;font-size:12px;cursor:pointer;font-family:var(--ff);
+  letter-spacing:.1em;margin-top:11px;transition:opacity .2s;
+  font-weight:normal;
+}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:active:not(:disabled){opacity:.8}
+.btn-o{background:none;border:1px solid var(--border2);color:var(--sub);padding:7px 14px;font-size:10px;cursor:pointer;font-family:var(--ff);letter-spacing:.06em;transition:border-color .2s,color .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.btn-o.danger{border-color:#3a2020;color:var(--red)}
+.btn-o.wide{display:block;width:100%;padding:10px;margin-bottom:8px;text-align:center}
+.btn-o.sm{padding:4px 11px;font-size:10px}
+
+/* Done */
+.done{
+  background:var(--s1);border:1px solid var(--border);
+  padding:12px 14px;display:flex;align-items:center;gap:9px;
+  font-size:12px;color:var(--sub);
+}
+.done-ck{color:var(--gold)}
+.done-ans{
+  background:var(--s1);border:1px solid var(--border);border-top:none;
+  padding:12px 14px;font-size:12px;color:var(--sub);line-height:1.8;
+}
+
+/* Hint */
+.hint{margin-top:14px;font-size:11px;color:var(--dim);line-height:1.7;padding:9px 13px;background:var(--s1);border-left:2px solid var(--border2)}
+
+/* Log */
+.lcard{background:var(--s1);border:1px solid var(--border);padding:13px 14px;margin-bottom:11px}
+.lmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.ldate{font-size:10px;color:var(--dim);letter-spacing:.1em}
+.lq{font-size:11px;color:var(--dim2);line-height:1.6;margin-bottom:6px}
+.la{font-size:12px;color:#a8a098;line-height:1.85}
+
+/* Draft / Editor */
+.editor-wrap{position:relative;margin-top:14px}
+.editor-toolbar{
+  padding:9px 13px;background:var(--s2);border:1px solid var(--border);
+  border-bottom:none;display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+}
+.tb-btn{
+  background:none;border:1px solid var(--border2);color:var(--sub);
+  padding:4px 9px;font-size:10px;cursor:pointer;font-family:var(--ff);
+  letter-spacing:.04em;
+}
+.tb-btn:active{background:var(--border2)}
+.tb-sep{width:1px;height:16px;background:var(--border2);margin:0 3px}
+.editor-area{
+  width:100%;min-height:240px;background:var(--s1);border:1px solid var(--border);
+  color:var(--text);font-family:var(--ff);font-size:12px;line-height:1.9;
+  padding:14px;resize:vertical;outline:none;border-radius:0;-webkit-appearance:none;
+}
+.editor-area:focus{border-color:var(--gold)}
+.editor-actions{
+  margin-top:10px;display:flex;gap:8px;
+}
+.char-count{font-size:10px;color:var(--dim);margin-top:6px;text-align:right;letter-spacing:.06em}
+
+/* Generating */
+.gen-msg{text-align:center;padding:28px 0;color:var(--dim);font-size:11px;letter-spacing:.12em}
+
+/* Templates */
+.tcard{
+  background:var(--s1);border:1px solid var(--border);
+  padding:13px 14px;margin-bottom:10px;
+}
+.tcard-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.tcard-name{font-size:11px;color:var(--gold);letter-spacing:.08em}
+.tcard-body{font-size:12px;color:var(--sub);line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.tcard-actions{display:flex;gap:6px;margin-top:10px}
+
+/* Settings */
+.sg{margin-bottom:22px}
+.sgl{display:block;font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:9px}
+.si{font-size:10px;color:#2a2a2a;line-height:1.8;letter-spacing:.05em;margin-top:22px}
+hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* Empty */
+.empty{text-align:center;padding:44px 16px;color:var(--dim);font-size:12px;line-height:2}
+
+/* Error */
+.err{color:var(--red);font-size:11px;padding:10px 0;text-align:center}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:calc(76px + var(--sb) + 8px);left:50%;
+  transform:translateX(-50%);
+  background:var(--s2);border:1px solid var(--gold);color:var(--gold);
+  padding:8px 18px;font-size:11px;letter-spacing:.1em;z-index:200;
+  white-space:nowrap;pointer-events:none;
+  animation:fi .25s ease;
+}
+
+/* Tab indicator */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{
+  flex:1;background:none;border:none;color:var(--dim);
+  padding:10px 0;font-size:10px;cursor:pointer;
+  font-family:var(--ff);letter-spacing:.08em;
+  border-bottom:2px solid transparent;transition:color .2s,border-color .2s;
+}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* Section divider */
+.sec-div{border:none;border-top:1px solid var(--border);margin:16px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-l">
+      <span class="hdr-star">✦</span>
+      <span class="hdr-title">現場ログ</span>
+    </div>
+    <span class="hdr-badge" id="hdr-badge">0件</span>
+  </div>
+  <div class="content fi" id="content"></div>
+  <nav class="bnav">
+    <button class="nb on" id="nb-today" onclick="go('today')"><span class="ni">◎</span>今日</button>
+    <button class="nb" id="nb-log" onclick="go('log')"><span class="ni">≡</span>ログ</button>
+    <button class="nb" id="nb-draft" onclick="go('draft')"><span class="ni">✎</span>記事</button>
+    <button class="nb" id="nb-tmpl" onclick="go('tmpl')"><span class="ni">❐</span>定型文</button>
+    <button class="nb" id="nb-cfg" onclick="go('cfg')"><span class="ni">⚙</span>設定</button>
+  </nav>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────
+const QS = [
+  "今日、現場で一番「これは仕組みで解決できる」と思った瞬間は？",
+  "ヘルパーや事務スタッフから最近もらった声（不満・感謝・困りごと）は？",
+  "AIに任せてみて「やっぱり人が必要だった」と感じた場面は？",
+  "今のシステムで、まだ一番手作業が残っている部分はどこですか？",
+  "今週詰まったこと・バグ・予想外だったことを一つ教えてください。",
+  "ご家族とのやりとりで「これDXできたら楽になる」と思った場面は？",
+  "「こう設計すれば良かった」と後から気づいたことはありますか？",
+  "今日の業務の中で、一番時間がかかったことは？",
+  "Supabase・GAS・Firebase・Claudeで「これは便利」と感じた使い方を一つ。",
+  "スケジュール管理で、今一番の課題は？",
+  "情報共有で一番気をつけていることは？",
+  "福祉DXを進める上で、行政との間で感じるギャップは？",
+  "新しい機能をリリースした後、現場からどんな反応がありましたか？",
+  "「完璧なシステム」より「回る運用」を優先した具体的な判断を教えてください。",
+  "ヘルパーのIT理解度の差をどう吸収する設計にしていますか？",
+  "今日一番「現場だなあ」と感じた出来事は？",
+  "記録入力で、ヘルパーが一番つまずくポイントはどこですか？",
+  "ご家族との連絡で「これは改善したい」と思っていることは？",
+  "FC展開を考えたとき、今一番の課題は何ですか？",
+  "介護DXで「理想と現実のギャップ」を一番感じるのはどんな時ですか？",
+  "音楽活動と介護事業、両方やってて気づいたことはありますか？",
+  "街づくりの構想で、最近一番考えていることは？",
+  "今日、誰かに伝えたかったけど伝えられなかったことは？",
+  "世界展開を考えた時、日本の福祉現場の「強み」だと思うことは？",
+];
+
+const DEFAULT_TEMPLATES = [
+  {
+    id:'t1',
+    name:'記事末尾 — 著者署名',
+    body:`---
+
+*奥原翼*
+*障害福祉事業所運営 / 現場系エンジニア / ミュージシャン / 街づくり構想中*`
+  },
+  {
+    id:'t2',
+    name:'記事末尾 — SNSリンク',
+    body:`---
+
+**関連リンク**
+- GitHub: https://github.com/tsubasa-okuhara
+- 利用者アプリ: https://tsubasa-okuhara.github.io/user-schedule-app/`
+  },
+  {
+    id:'t3',
+    name:'冒頭あいさつ',
+    body:`こんにちは、翼です。
+障害福祉の事業所を運営しながら、現場で使えるシステムを自分で作っています。
+今日は現場で気づいたことを書きます。`
+  },
+];
+
+const key = () => new Date().toISOString().slice(0,10);
+function qfor(d){ let h=0; for(let c of d) h=(h*31+c.charCodeAt(0))&0xfffffff; return QS[h%QS.length]; }
+
+const ga = () => { try{ return JSON.parse(localStorage.getItem('gl-a')||'[]'); }catch{ return []; } };
+const sa = a => localStorage.setItem('gl-a', JSON.stringify(a));
+const gk = () => localStorage.getItem('gl-key')||'';
+const gd = () => localStorage.getItem('gl-draft')||'';
+const sd = t => localStorage.setItem('gl-draft', t);
+const gt = () => { try{ return JSON.parse(localStorage.getItem('gl-tmpl'))||DEFAULT_TEMPLATES; }catch{ return DEFAULT_TEMPLATES; } };
+const stmpls = t => localStorage.setItem('gl-tmpl', JSON.stringify(t));
+
+// Init templates
+if(!localStorage.getItem('gl-tmpl')) stmpls(DEFAULT_TEMPLATES);
+
+function toast(msg){
+  document.getElementById('_toast')?.remove();
+  const t=Object.assign(document.createElement('div'),{id:'_toast',className:'toast',textContent:msg});
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2100);
+}
+
+function badge(){
+  const n = ga().length;
+  document.getElementById('hdr-badge').textContent = `${n}件蓄積`;
+}
+
+function go(v){
+  ['today','log','draft','tmpl','cfg'].forEach(id=>{
+    document.getElementById(`nb-${id}`).classList.toggle('on', id===v);
+  });
+  const c = document.getElementById('content');
+  c.className='content fi';
+  c.innerHTML='';
+  ({today:rToday,log:rLog,draft:rDraft,tmpl:rTmpl,cfg:rCfg})[v](c);
+  badge();
+}
+
+// ── TODAY ─────────────────────────────────────
+function rToday(el){
+  const today=key(), q=qfor(today);
+  const ans=ga().find(a=>a.date===today);
+
+  el.innerHTML=`
+    <div class="dlabel">${today}</div>
+    <div class="qcard"><span class="qm">Q</span><p class="qt">${q}</p></div>
+    <div id="_aa"></div><div id="_hint"></div>`;
+
+  const aa=document.getElementById('_aa');
+  const hn=document.getElementById('_hint');
+
+  if(ans){
+    aa.innerHTML=`
+      <div class="done">
+        <span class="done-ck">✓</span>
+        <span style="flex:1;font-size:11px">今日の回答を記録しました</span>
+        <button class="btn-o sm" id="_redo">書き直す</button>
+      </div>
+      <div class="done-ans">${ans.answer.replace(/\n/g,'<br>')}</div>`;
+    document.getElementById('_redo').onclick=()=>{
+      sa(ga().filter(a=>a.date!==today)); go('today');
+    };
+  } else {
+    aa.innerHTML=`
+      <textarea id="_ai" rows="6" placeholder="短くてOK。話し言葉・箇条書き、なんでも。&#10;現場の言葉で書いてください。"></textarea>
+      <button class="btn" id="_sb" disabled>記録する</button>`;
+    const inp=document.getElementById('_ai');
+    inp.addEventListener('input',()=>document.getElementById('_sb').disabled=!inp.value.trim());
+    document.getElementById('_sb').onclick=()=>{
+      if(!inp.value.trim()) return;
+      const arr=ga().filter(a=>a.date!==today);
+      arr.unshift({date:today,question:q,answer:inp.value.trim()});
+      sa(arr); toast('記録しました ✓'); go('today');
+    };
+  }
+
+  const cnt=ga().length;
+  if(cnt>=3) hn.innerHTML=`<div class="hint">💡 ${cnt}件溜まっています。「記事」タブで下書きを生成できます。</div>`;
+}
+
+// ── LOG ───────────────────────────────────────
+function rLog(el){
+  const arr=ga();
+  if(!arr.length){ el.innerHTML=`<div class="empty">まだ記録がありません。<br>「今日」タブから始めてください。</div>`; return; }
+  el.innerHTML=arr.map(a=>`
+    <div class="lcard">
+      <div class="lmeta">
+        <span class="ldate">${a.date}</span>
+        <button class="btn-o sm" onclick="delA('${a.date}')">削除</button>
+      </div>
+      <p class="lq">${a.question}</p>
+      <p class="la">${a.answer.replace(/\n/g,'<br>')}</p>
+    </div>`).join('');
+}
+function delA(date){
+  sa(ga().filter(a=>a.date!==date)); toast('削除しました'); go('log');
+}
+
+// ── DRAFT ────────────────────────────────────
+function rDraft(el){
+  const cnt=ga().length;
+  const hasDraft=gd();
+  const hasKey=gk();
+
+  el.innerHTML=`
+    <div class="tab-bar">
+      <button class="tab on" id="tab-gen" onclick="draftTab('gen')">生成</button>
+      <button class="tab" id="tab-edit" onclick="draftTab('edit')">編集・投稿</button>
+    </div>
+    <div id="_dtab"></div>`;
+
+  draftTab(hasDraft?'edit':'gen');
+}
+
+function draftTab(t){
+  ['gen','edit'].forEach(id=>{
+    document.getElementById(`tab-${id}`)?.classList.toggle('on', id===t);
+  });
+  const wrap=document.getElementById('_dtab');
+  if(!wrap) return;
+  if(t==='gen') renderGen(wrap);
+  else renderEdit(wrap);
+}
+
+function renderGen(el){
+  const cnt=ga().length;
+  const hasKey=gk();
+  if(!hasKey){
+    el.innerHTML=`<div class="empty">APIキーが設定されていません。<br>「設定」タブで入力してください。</div>`; return;
+  }
+  if(cnt<3){
+    el.innerHTML=`<div class="empty">記事生成には3件以上の記録が必要です。<br>あと${3-cnt}件答えてください。</div>`; return;
+  }
+  el.innerHTML=`
+    <p class="slabel" style="margin-bottom:14px">直近${Math.min(cnt,7)}件のログから記事を生成します</p>
+    <button class="btn" id="_gb" style="margin-top:0" onclick="generate()">✦ 記事ドラフトを生成する</button>
+    <div id="_gout"></div>`;
+  if(gd()) showGenPreview(document.getElementById('_gout'), gd());
+}
+
+function showGenPreview(el, text){
+  el.innerHTML=`
+    <div style="margin-top:14px;background:var(--s1);border:1px solid var(--border)">
+      <div style="padding:9px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;color:var(--dim);letter-spacing:.1em">生成済み下書き</span>
+        <button class="btn-o sm" onclick="draftTab('edit')">編集・投稿へ →</button>
+      </div>
+      <div style="padding:14px;font-size:11px;color:#888;line-height:1.9;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-word">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,400)}...</div>
+    </div>`;
+}
+
+async function generate(){
+  const btn=document.getElementById('_gb');
+  const out=document.getElementById('_gout');
+  btn.disabled=true; btn.textContent='生成中...';
+  out.innerHTML=`<div class="gen-msg" id="_gdots">現場ログを記事に変換しています<span id="_dt"></span></div>`;
+  let d=0; const ti=setInterval(()=>{ const el=document.getElementById('_dt'); if(el) el.textContent='.'.repeat((d++%3)+1); },500);
+
+  const ctx=ga().slice(0,7).map(a=>`【質問】${a.question}\n【回答】${a.answer}`).join('\n\n');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':gk(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`あなたは障害福祉事業所を運営しながらGAS/Supabase/Firebase/Claude APIでシステムを自作している実務家の文章を書くアシスタントです。
+技術自慢にならず、現場のリアルを軸にした「現場ログ型」のnote記事ドラフトを書いてください。
+・冒頭は現場の一場面から入る（感情より事実で）
+・AIや技術は補助として描く（主役は現場）
+・失敗・課題も正直に書く
+・「なぜその設計にしたか」の意思決定を含める
+・600〜900文字程度
+・Markdown形式、タイトルも含める（#で始める）`,
+        messages:[{role:'user',content:`以下の現場メモをもとに、note記事のドラフトを書いてください。\n\n${ctx}`}]
+      })
+    });
+    const data=await res.json();
+    clearInterval(ti);
+    if(data.error){ out.innerHTML=`<div class="err">エラー: ${data.error.message}</div>`; return; }
+    const text=data.content?.find(b=>b.type==='text')?.text||'生成に失敗しました。';
+    sd(text);
+    showGenPreview(out, text);
+    toast('生成完了！「編集・投稿」で確認できます');
+  } catch(e){
+    clearInterval(ti);
+    out.innerHTML=`<div class="err">エラーが発生しました。APIキーとネットワークを確認してください。</div>`;
+  } finally{
+    btn.disabled=false; btn.textContent='✦ 記事ドラフトを生成する';
+  }
+}
+
+function renderEdit(el){
+  const draft=gd();
+  const tmpls=gt();
+
+  el.innerHTML=`
+    <div class="slabel">定型文を挿入</div>
+    <div id="_tbtns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+      ${tmpls.map(t=>`<button class="btn-o" onclick="insertTmpl('${t.id}')" style="font-size:10px;padding:5px 10px">${t.name}</button>`).join('')}
+    </div>
+    <div class="slabel">本文エディタ</div>
+    <textarea class="editor-area" id="_edt" rows="14" placeholder="ここに記事を書く・編集する...">${draft.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+    <div class="char-count" id="_cc">${draft.length}文字</div>
+    <div class="editor-actions">
+      <button class="btn" style="flex:1;margin-top:0" onclick="copyAll()">📋 全文コピー</button>
+      <button class="btn-o" style="margin-top:0;padding:12px 16px" onclick="clearDraft()">クリア</button>
+    </div>
+    <div style="margin-top:10px;font-size:10px;color:var(--dim);line-height:1.8;padding:9px 12px;background:var(--s1);border:1px solid var(--border)">
+      📌 コピー後、noteのエディタに貼り付けるだけで完成。<br>見出し(#)・箇条書き(-)が自動で装飾されます。
+    </div>`;
+
+  const edt=document.getElementById('_edt');
+  edt.addEventListener('input',()=>{
+    sd(edt.value);
+    document.getElementById('_cc').textContent=`${edt.value.length}文字`;
+  });
+}
+
+function insertTmpl(id){
+  const t=gt().find(x=>x.id===id); if(!t) return;
+  const edt=document.getElementById('_edt'); if(!edt) return;
+  const pos=edt.selectionEnd;
+  const v=edt.value;
+  edt.value=v.slice(0,pos)+'\n'+t.body+'\n'+v.slice(pos);
+  sd(edt.value);
+  document.getElementById('_cc').textContent=`${edt.value.length}文字`;
+  toast(`「${t.name}」を挿入しました`);
+}
+
+function copyAll(){
+  const edt=document.getElementById('_edt'); if(!edt) return;
+  navigator.clipboard.writeText(edt.value).then(()=>toast('全文コピーしました ✓'));
+}
+
+function clearDraft(){
+  if(!confirm('下書きをクリアしますか？')) return;
+  sd('');
+  go('draft');
+}
+
+// ── TEMPLATES ────────────────────────────────
+function rTmpl(el){
+  const tmpls=gt();
+  el.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <span class="slabel" style="margin:0">定型文一覧</span>
+      <button class="btn-o sm" onclick="newTmpl()">＋ 追加</button>
+    </div>
+    <div id="_tlist"></div>`;
+  renderTlist();
+}
+
+function renderTlist(){
+  const el=document.getElementById('_tlist'); if(!el) return;
+  const tmpls=gt();
+  if(!tmpls.length){ el.innerHTML=`<div class="empty">定型文がありません。<br>「＋ 追加」から作成してください。</div>`; return; }
+  el.innerHTML=tmpls.map(t=>`
+    <div class="tcard">
+      <div class="tcard-hd">
+        <span class="tcard-name">${t.name}</span>
+      </div>
+      <p class="tcard-body">${t.body.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+      <div class="tcard-actions">
+        <button class="btn-o sm" onclick="editTmpl('${t.id}')">編集</button>
+        <button class="btn-o sm danger" onclick="delTmpl('${t.id}')">削除</button>
+      </div>
+    </div>`).join('');
+}
+
+function newTmpl(){
+  const name=prompt('定型文の名前を入力してください:'); if(!name) return;
+  const body=prompt('内容を入力してください（改行はそのまま入力）:'); if(!body) return;
+  const tmpls=gt();
+  tmpls.push({id:'t'+Date.now(), name, body});
+  stmpls(tmpls); renderTlist(); toast('追加しました ✓');
+}
+
+function editTmpl(id){
+  const tmpls=gt(); const t=tmpls.find(x=>x.id===id); if(!t) return;
+  const name=prompt('名前:', t.name); if(name===null) return;
+  const body=prompt('内容:', t.body); if(body===null) return;
+  t.name=name; t.body=body;
+  stmpls(tmpls); renderTlist(); toast('更新しました ✓');
+}
+
+function delTmpl(id){
+  if(!confirm('この定型文を削除しますか？')) return;
+  stmpls(gt().filter(t=>t.id!==id)); renderTlist(); toast('削除しました');
+}
+
+// ── CONFIG ───────────────────────────────────
+function rCfg(el){
+  el.innerHTML=`
+    <div class="sg">
+      <label class="sgl">ANTHROPIC API KEY</label>
+      <input type="password" id="_ak" value="${gk()}" placeholder="sk-ant-..." autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="btn" onclick="const v=document.getElementById('_ak').value.trim();localStorage.setItem('gl-key',v);toast('保存しました ✓')">保存する</button>
+    </div>
+    <hr>
+    <div class="sg">
+      <label class="sgl">データ管理</label>
+      <button class="btn-o wide" onclick="exportData()">ログをエクスポート（JSON）</button>
+      <button class="btn-o wide danger" onclick="if(confirm('全データを削除しますか？')){['gl-a','gl-draft','gl-tmpl'].forEach(k=>localStorage.removeItem(k));toast('削除しました');go('today')}">全データを削除</button>
+    </div>
+    <hr>
+    <div class="si">
+      現場ログ v2.0<br>
+      APIキーはこの端末にのみ保存されます。<br>
+      記事生成1回あたり数円程度の費用が発生します。<br><br>
+      ないものは、作ればいい。— 奥原翼
+    </div>`;
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({answers:ga(),draft:gd(),exported:new Date().toISOString()},null,2)],{type:'application/json'});
+  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`genba-log-${key()}.json`});
+  a.click();
+}
+
+// SW
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// Init
+go('today');
+</script>
+</body>
+</html>
