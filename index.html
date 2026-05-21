@@ -14,8 +14,8 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#0c0c0c;--s1:#141414;--s2:#1c1c1c;--border:#252525;--border2:#2e2e2e;
-  --gold:#c8a96e;--gold2:#e8c98e;--text:#ddd5c5;--sub:#999;--dim:#555;--dim2:#3a3a3a;
-  --red:#c0504d;--green:#5a9a6a;
+  --gold:#c8a96e;--text:#ddd5c5;--sub:#888;--dim:#555;--dim2:#3a3a3a;
+  --red:#c0504d;--green:#5a9a6a;--blue:#6a8ab0;
   --sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px);
   --ff:'Georgia','Hiragino Mincho ProN','Yu Mincho',serif;
 }
@@ -23,179 +23,150 @@ body{background:var(--bg);color:var(--text);font-family:var(--ff);min-height:100
 .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 
 /* Header */
-.hdr{
-  padding:calc(14px + var(--st)) 18px 14px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  position:sticky;top:0;background:var(--bg);z-index:20;
-  backdrop-filter:blur(10px);
-}
-.hdr-l{display:flex;align-items:center;gap:9px}
-.hdr-star{color:var(--gold);font-size:15px;line-height:1}
-.hdr-title{color:var(--text);font-size:15px;letter-spacing:.12em;font-weight:normal}
-.hdr-badge{
-  font-size:10px;color:var(--dim);border:1px solid var(--border2);
-  padding:3px 10px;border-radius:20px;letter-spacing:.06em;
-}
+.hdr{padding:calc(12px + var(--st)) 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:20}
+.hdr-l{display:flex;align-items:center;gap:8px}
+.hdr-star{color:var(--gold);font-size:14px}
+.hdr-title{color:var(--text);font-size:14px;letter-spacing:.12em}
+.phase-pill{font-size:10px;padding:3px 10px;border-radius:20px;letter-spacing:.06em;border:1px solid}
+.phase-1{color:#7ab87a;border-color:#3a5a3a;background:#1a2a1a}
+.phase-2{color:#7a9ab8;border-color:#2a3a5a;background:#1a1a2a}
+.phase-3{color:#c8a96e;border-color:#5a4a2a;background:#2a1a0a}
 
 /* Content */
-.content{flex:1;padding:18px 18px calc(74px + var(--sb));overflow-y:auto;-webkit-overflow-scrolling:touch}
+.content{flex:1;padding:16px 16px calc(72px + var(--sb));overflow-y:auto;-webkit-overflow-scrolling:touch}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fi .2s ease}
 
 /* Bottom nav */
-.bnav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;
-  background:var(--s1);border-top:1px solid var(--border);
-  display:grid;grid-template-columns:repeat(5,1fr);
-  padding-bottom:var(--sb);z-index:20;
-}
-.nb{
-  background:none;border:none;color:var(--dim);
-  padding:10px 0 9px;font-size:9px;cursor:pointer;
-  font-family:var(--ff);letter-spacing:.05em;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  transition:color .2s;
-}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--s1);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:var(--sb);z-index:20}
+.nb{background:none;border:none;color:var(--dim);padding:10px 0 8px;font-size:9px;cursor:pointer;font-family:var(--ff);letter-spacing:.05em;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
 .nb.on{color:var(--gold)}
-.ni{font-size:16px;line-height:1}
+.ni{font-size:15px;line-height:1}
 
-/* Animations */
-@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.fi{animation:fi .22s ease}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+/* Labels */
+.dlabel{font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:12px}
+.slabel{font-size:10px;color:var(--dim);letter-spacing:.1em;margin-bottom:10px}
 
-/* Typography */
-.dlabel{font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:14px;text-transform:uppercase}
-.slabel{font-size:10px;color:var(--dim);letter-spacing:.12em;margin-bottom:12px}
+/* Phase banner */
+.phase-banner{background:var(--s1);border:1px solid var(--border);border-left:2px solid;padding:12px 14px;margin-bottom:16px}
+.phase-banner.p1{border-left-color:#7ab87a}
+.phase-banner.p2{border-left-color:#7a9ab8}
+.phase-banner.p3{border-left-color:var(--gold)}
+.pb-title{font-size:11px;letter-spacing:.1em;margin-bottom:4px}
+.pb-desc{font-size:11px;color:var(--sub);line-height:1.7}
 
-/* Question card */
-.qcard{
-  background:var(--s1);border:1px solid var(--border);
-  border-left:2px solid var(--gold);
-  padding:15px 16px;margin-bottom:18px;display:flex;gap:11px;
-}
-.qm{color:var(--gold);font-size:12px;font-weight:bold;flex-shrink:0;margin-top:3px;letter-spacing:.05em}
-.qt{color:var(--text);font-size:13px;line-height:1.9}
+/* Chat */
+.chat-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;min-height:160px}
+.bubble{max-width:88%;padding:11px 13px;font-size:13px;line-height:1.8;border-radius:2px}
+.bubble.ai{background:var(--s1);border:1px solid var(--border);color:var(--text);align-self:flex-start}
+.bubble.user{background:#1e1a12;border:1px solid #3a2e18;color:#d4c8a8;align-self:flex-end;text-align:right}
+.bubble.thinking{color:var(--dim);font-size:12px;font-style:italic}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.dot{display:inline-block;animation:blink 1.2s infinite;font-size:18px;line-height:1}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
 
-/* Textarea */
-textarea,input[type=text],input[type=password]{
-  width:100%;background:var(--s1);border:1px solid var(--border);
-  color:var(--text);font-family:var(--ff);font-size:13px;
-  line-height:1.85;padding:13px 14px;resize:vertical;
-  outline:none;border-radius:0;-webkit-appearance:none;
-  transition:border-color .2s;
-}
-textarea:focus,input:focus{border-color:var(--gold)}
-input[type=text],input[type=password]{resize:none}
+/* Input row */
+.input-row{display:flex;gap:8px;align-items:flex-end}
+.chat-input{flex:1;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--ff);font-size:13px;line-height:1.7;padding:10px 12px;resize:none;outline:none;border-radius:0;-webkit-appearance:none;max-height:120px;min-height:44px;transition:border-color .2s}
+.chat-input:focus{border-color:var(--gold)}
+.send-btn{background:var(--gold);border:none;color:#0c0c0c;width:44px;height:44px;cursor:pointer;font-size:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.send-btn:disabled{opacity:.3;cursor:not-allowed}
 
 /* Buttons */
-.btn{
-  width:100%;background:var(--gold);border:none;color:#0c0c0c;
-  padding:12px;font-size:12px;cursor:pointer;font-family:var(--ff);
-  letter-spacing:.1em;margin-top:11px;transition:opacity .2s;
-  font-weight:normal;
-}
+.btn{width:100%;background:var(--gold);border:none;color:#0c0c0c;padding:12px;font-size:12px;cursor:pointer;font-family:var(--ff);letter-spacing:.1em;margin-top:10px;transition:opacity .2s}
 .btn:disabled{opacity:.35;cursor:not-allowed}
-.btn:active:not(:disabled){opacity:.8}
-.btn-o{background:none;border:1px solid var(--border2);color:var(--sub);padding:7px 14px;font-size:10px;cursor:pointer;font-family:var(--ff);letter-spacing:.06em;transition:border-color .2s,color .2s}
+.btn-o{background:none;border:1px solid var(--border2);color:var(--sub);padding:6px 13px;font-size:10px;cursor:pointer;font-family:var(--ff);letter-spacing:.06em;transition:all .2s}
 .btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.btn-o.active{border-color:var(--gold);color:var(--gold);background:#1a1408}
 .btn-o.danger{border-color:#3a2020;color:var(--red)}
 .btn-o.wide{display:block;width:100%;padding:10px;margin-bottom:8px;text-align:center}
-.btn-o.sm{padding:4px 11px;font-size:10px}
+.btn-o.sm{padding:4px 10px;font-size:10px}
 
-/* Done */
-.done{
-  background:var(--s1);border:1px solid var(--border);
-  padding:12px 14px;display:flex;align-items:center;gap:9px;
-  font-size:12px;color:var(--sub);
-}
-.done-ck{color:var(--gold)}
-.done-ans{
-  background:var(--s1);border:1px solid var(--border);border-top:none;
-  padding:12px 14px;font-size:12px;color:var(--sub);line-height:1.8;
-}
-
-/* Hint */
-.hint{margin-top:14px;font-size:11px;color:var(--dim);line-height:1.7;padding:9px 13px;background:var(--s1);border-left:2px solid var(--border2)}
+/* Save session */
+.save-session{margin-top:12px;padding:10px 13px;background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--sub)}
 
 /* Log */
-.lcard{background:var(--s1);border:1px solid var(--border);padding:13px 14px;margin-bottom:11px}
-.lmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.lcard{background:var(--s1);border:1px solid var(--border);padding:12px 14px;margin-bottom:10px}
+.lmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .ldate{font-size:10px;color:var(--dim);letter-spacing:.1em}
-.lq{font-size:11px;color:var(--dim2);line-height:1.6;margin-bottom:6px}
+.lphase{font-size:9px;padding:2px 7px;border-radius:10px;border:1px solid var(--border2);color:var(--dim)}
+.lq{font-size:11px;color:var(--dim2);line-height:1.6;margin-bottom:5px}
 .la{font-size:12px;color:#a8a098;line-height:1.85}
 
-/* Draft / Editor */
-.editor-wrap{position:relative;margin-top:14px}
-.editor-toolbar{
-  padding:9px 13px;background:var(--s2);border:1px solid var(--border);
-  border-bottom:none;display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-}
-.tb-btn{
-  background:none;border:1px solid var(--border2);color:var(--sub);
-  padding:4px 9px;font-size:10px;cursor:pointer;font-family:var(--ff);
-  letter-spacing:.04em;
-}
-.tb-btn:active{background:var(--border2)}
-.tb-sep{width:1px;height:16px;background:var(--border2);margin:0 3px}
-.editor-area{
-  width:100%;min-height:240px;background:var(--s1);border:1px solid var(--border);
-  color:var(--text);font-family:var(--ff);font-size:12px;line-height:1.9;
-  padding:14px;resize:vertical;outline:none;border-radius:0;-webkit-appearance:none;
-}
-.editor-area:focus{border-color:var(--gold)}
-.editor-actions{
-  margin-top:10px;display:flex;gap:8px;
-}
-.char-count{font-size:10px;color:var(--dim);margin-top:6px;text-align:right;letter-spacing:.06em}
+/* Draft */
+.length-row{display:flex;gap:6px;margin-bottom:14px}
+.draft-out{margin-top:14px}
+.draft-box{background:var(--s1);border:1px solid var(--border)}
+.draft-hdr{padding:9px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.draft-txt{padding:14px;font-size:12px;color:#b0a898;line-height:1.9;white-space:pre-wrap;word-break:break-word;max-height:40vh;overflow-y:auto;font-family:var(--ff)}
 
-/* Generating */
-.gen-msg{text-align:center;padding:28px 0;color:var(--dim);font-size:11px;letter-spacing:.12em}
+/* Titles */
+.title-list{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.title-item{background:var(--s1);border:1px solid var(--border);padding:11px 13px;font-size:13px;color:var(--text);line-height:1.6;cursor:pointer;transition:border-color .2s;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.title-item:hover{border-color:var(--gold)}
+.title-item.selected{border-color:var(--gold);background:#1a1408}
+
+/* Tags */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:11px;color:var(--gold);border:1px solid #3a2e18;padding:3px 10px;background:#1a1408;cursor:pointer}
+.tag:hover{background:#2a1e08}
+
+/* Editor */
+.editor-area{width:100%;min-height:200px;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--ff);font-size:12px;line-height:1.9;padding:13px;resize:vertical;outline:none;border-radius:0;-webkit-appearance:none;transition:border-color .2s}
+.editor-area:focus{border-color:var(--gold)}
+.char-count{font-size:10px;color:var(--dim);margin-top:5px;text-align:right}
+.editor-actions{margin-top:10px;display:flex;gap:8px}
 
 /* Templates */
-.tcard{
-  background:var(--s1);border:1px solid var(--border);
-  padding:13px 14px;margin-bottom:10px;
-}
-.tcard-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.tcard{background:var(--s1);border:1px solid var(--border);padding:12px 14px;margin-bottom:10px}
+.tcard-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .tcard-name{font-size:11px;color:var(--gold);letter-spacing:.08em}
 .tcard-body{font-size:12px;color:var(--sub);line-height:1.8;white-space:pre-wrap;word-break:break-word}
-.tcard-actions{display:flex;gap:6px;margin-top:10px}
+.tcard-actions{display:flex;gap:6px;margin-top:9px}
 
 /* Settings */
-.sg{margin-bottom:22px}
-.sgl{display:block;font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:9px}
-.si{font-size:10px;color:#2a2a2a;line-height:1.8;letter-spacing:.05em;margin-top:22px}
-hr{border:none;border-top:1px solid var(--border);margin:18px 0}
+.sg{margin-bottom:20px}
+.sgl{display:block;font-size:10px;color:var(--dim);letter-spacing:.14em;margin-bottom:8px}
+.api-input{width:100%;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:'Courier New',monospace;font-size:12px;padding:11px 13px;outline:none;-webkit-appearance:none;border-radius:0;transition:border-color .2s}
+.api-input:focus{border-color:var(--gold)}
+
+/* Phase selector */
+.phase-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.pcard{background:var(--s1);border:2px solid var(--border);padding:12px 10px;cursor:pointer;text-align:center;transition:all .2s}
+.pcard.sel{border-color:var(--gold);background:#1a1408}
+.pcard-num{font-size:18px;color:var(--gold);margin-bottom:4px}
+.pcard-label{font-size:10px;color:var(--sub);line-height:1.5;letter-spacing:.04em}
+
+/* Counter */
+.counter-wrap{background:var(--s1);border:1px solid var(--border);padding:14px;margin-bottom:16px}
+.counter-num{font-size:36px;color:var(--gold);text-align:center;margin-bottom:4px;letter-spacing:.1em}
+.counter-label{font-size:10px;color:var(--dim);text-align:center;letter-spacing:.1em;margin-bottom:12px}
+.counter-btns{display:flex;gap:8px}
+.counter-milestone{margin-top:10px;font-size:11px;color:var(--sub);text-align:center;line-height:1.7;padding:8px;border-top:1px solid var(--border)}
+
+/* Notification */
+.notif{background:#1a1a0a;border:1px solid #4a4a1a;padding:12px 14px;margin-bottom:14px;font-size:12px;color:#c8c87a;line-height:1.7}
+
+/* Gen msg */
+.gen-msg{text-align:center;padding:24px 0;color:var(--dim);font-size:11px;letter-spacing:.12em}
 
 /* Empty */
-.empty{text-align:center;padding:44px 16px;color:var(--dim);font-size:12px;line-height:2}
+.empty{text-align:center;padding:40px 16px;color:var(--dim);font-size:12px;line-height:2}
 
 /* Error */
-.err{color:var(--red);font-size:11px;padding:10px 0;text-align:center}
+.err{color:var(--red);font-size:11px;padding:8px 0;text-align:center}
+
+/* HR */
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
 
 /* Toast */
-.toast{
-  position:fixed;bottom:calc(76px + var(--sb) + 8px);left:50%;
-  transform:translateX(-50%);
-  background:var(--s2);border:1px solid var(--gold);color:var(--gold);
-  padding:8px 18px;font-size:11px;letter-spacing:.1em;z-index:200;
-  white-space:nowrap;pointer-events:none;
-  animation:fi .25s ease;
-}
+.toast{position:fixed;bottom:calc(74px + var(--sb) + 8px);left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--gold);color:var(--gold);padding:7px 16px;font-size:11px;letter-spacing:.1em;z-index:200;white-space:nowrap;pointer-events:none;animation:fi .25s ease}
 
-/* Tab indicator */
-.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px}
-.tab{
-  flex:1;background:none;border:none;color:var(--dim);
-  padding:10px 0;font-size:10px;cursor:pointer;
-  font-family:var(--ff);letter-spacing:.08em;
-  border-bottom:2px solid transparent;transition:color .2s,border-color .2s;
-}
+/* Tab */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{flex:1;background:none;border:none;color:var(--dim);padding:9px 0;font-size:10px;cursor:pointer;font-family:var(--ff);letter-spacing:.08em;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
 .tab.on{color:var(--gold);border-bottom-color:var(--gold)}
-
-/* Section divider */
-.sec-div{border:none;border-top:1px solid var(--border);margin:16px 0}
 </style>
 </head>
 <body>
@@ -205,7 +176,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <span class="hdr-star">✦</span>
       <span class="hdr-title">現場ログ</span>
     </div>
-    <span class="hdr-badge" id="hdr-badge">0件</span>
+    <span class="phase-pill" id="phase-pill">Phase 1</span>
   </div>
   <div class="content fi" id="content"></div>
   <nav class="bnav">
@@ -218,141 +189,195 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 </div>
 
 <script>
-// ── Data ──────────────────────────────────────
-const QS = [
-  "今日、現場で一番「これは仕組みで解決できる」と思った瞬間は？",
-  "ヘルパーや事務スタッフから最近もらった声（不満・感謝・困りごと）は？",
-  "AIに任せてみて「やっぱり人が必要だった」と感じた場面は？",
-  "今のシステムで、まだ一番手作業が残っている部分はどこですか？",
-  "今週詰まったこと・バグ・予想外だったことを一つ教えてください。",
-  "ご家族とのやりとりで「これDXできたら楽になる」と思った場面は？",
-  "「こう設計すれば良かった」と後から気づいたことはありますか？",
-  "今日の業務の中で、一番時間がかかったことは？",
-  "Supabase・GAS・Firebase・Claudeで「これは便利」と感じた使い方を一つ。",
-  "スケジュール管理で、今一番の課題は？",
-  "情報共有で一番気をつけていることは？",
-  "福祉DXを進める上で、行政との間で感じるギャップは？",
-  "新しい機能をリリースした後、現場からどんな反応がありましたか？",
-  "「完璧なシステム」より「回る運用」を優先した具体的な判断を教えてください。",
-  "ヘルパーのIT理解度の差をどう吸収する設計にしていますか？",
-  "今日一番「現場だなあ」と感じた出来事は？",
-  "記録入力で、ヘルパーが一番つまずくポイントはどこですか？",
-  "ご家族との連絡で「これは改善したい」と思っていることは？",
-  "FC展開を考えたとき、今一番の課題は何ですか？",
-  "介護DXで「理想と現実のギャップ」を一番感じるのはどんな時ですか？",
-  "音楽活動と介護事業、両方やってて気づいたことはありますか？",
-  "街づくりの構想で、最近一番考えていることは？",
-  "今日、誰かに伝えたかったけど伝えられなかったことは？",
-  "世界展開を考えた時、日本の福祉現場の「強み」だと思うことは？",
-];
-
-const DEFAULT_TEMPLATES = [
-  {
-    id:'t1',
-    name:'記事末尾 — 著者署名',
-    body:`---
-
-*奥原翼*
-*障害福祉事業所運営 / 現場系エンジニア / ミュージシャン / 街づくり構想中*`
-  },
-  {
-    id:'t2',
-    name:'記事末尾 — SNSリンク',
-    body:`---
-
-**関連リンク**
-- GitHub: https://github.com/tsubasa-okuhara
-- 利用者アプリ: https://tsubasa-okuhara.github.io/user-schedule-app/`
-  },
-  {
-    id:'t3',
-    name:'冒頭あいさつ',
-    body:`こんにちは、翼です。
-障害福祉の事業所を運営しながら、現場で使えるシステムを自分で作っています。
-今日は現場で気づいたことを書きます。`
-  },
-];
-
-const key = () => new Date().toISOString().slice(0,10);
-function qfor(d){ let h=0; for(let c of d) h=(h*31+c.charCodeAt(0))&0xfffffff; return QS[h%QS.length]; }
-
+// ── Storage ────────────────────────────────
 const ga = () => { try{ return JSON.parse(localStorage.getItem('gl-a')||'[]'); }catch{ return []; } };
 const sa = a => localStorage.setItem('gl-a', JSON.stringify(a));
 const gk = () => localStorage.getItem('gl-key')||'';
 const gd = () => localStorage.getItem('gl-draft')||'';
 const sd = t => localStorage.setItem('gl-draft', t);
+const gPhase = () => parseInt(localStorage.getItem('gl-phase')||'1');
+const sPhase = p => { localStorage.setItem('gl-phase', p); updatePhasePill(); };
+const gCount = () => parseInt(localStorage.getItem('gl-count')||'0');
+const sCount = n => localStorage.setItem('gl-count', n);
+const gTitle = () => localStorage.getItem('gl-title')||'';
+const sTitle = t => localStorage.setItem('gl-title', t);
+const gTags = () => { try{ return JSON.parse(localStorage.getItem('gl-tags')||'[]'); }catch{ return []; } };
+const sTags = t => localStorage.setItem('gl-tags', JSON.stringify(t));
+
+const DEFAULT_TEMPLATES = [
+  {id:'t1',name:'著者署名',body:`---\n*奥原翼*\n*障害福祉事業所運営 / 現場系エンジニア / ミュージシャン / 街づくり構想中*`},
+  {id:'t2',name:'SNSリンク',body:`---\n**関連リンク**\n- GitHub: https://github.com/tsubasa-okuhara\n- 利用者アプリ: https://tsubasa-okuhara.github.io/user-schedule-app/`},
+  {id:'t3',name:'冒頭あいさつ',body:`こんにちは、翼です。\n障害福祉の事業所を運営しながら、現場で使えるシステムを自分で作っています。`},
+];
 const gt = () => { try{ return JSON.parse(localStorage.getItem('gl-tmpl'))||DEFAULT_TEMPLATES; }catch{ return DEFAULT_TEMPLATES; } };
 const stmpls = t => localStorage.setItem('gl-tmpl', JSON.stringify(t));
-
-// Init templates
 if(!localStorage.getItem('gl-tmpl')) stmpls(DEFAULT_TEMPLATES);
 
-function toast(msg){
-  document.getElementById('_toast')?.remove();
-  const t=Object.assign(document.createElement('div'),{id:'_toast',className:'toast',textContent:msg});
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2100);
+// Chat session state
+let chatHistory = [];
+let chatSaving = false;
+
+// ── Phase info ──────────────────────────────
+const PHASE_INFO = {
+  1: { label:'Phase 1', cls:'phase-1', title:'現場運営 × 自作システム', desc:'現場の失敗・工夫・仕組みを正直に書く。「この人、本当に現場やってる」を伝える段階。', profile:'障害福祉事業所を運営しながら、現場で使えるシステムを自分で作っています。GAS / Supabase / AI を使った福祉DXを、現場目線で試行錯誤中。', next:5 },
+  2: { label:'Phase 2', cls:'phase-2', title:'思想・設計の意思決定', desc:'なぜその設計か、なぜ自分で作るのか。技術者にも福祉関係者にも刺さる「思想」を見せる段階。', profile:'障害福祉事業所を運営しながらシステムを自作しています。「現場を壊さないDX」をテーマに、なぜその設計にしたかを書いています。', next:10 },
+  3: { label:'Phase 3', cls:'phase-3', title:'ビジョン・地域・構想', desc:'地域福祉・街づくり・雇用。「単なる開発者じゃない」が伝わる段階。', profile:'障害福祉 × 現場DX × 街づくり。ないものを作ることで、現場と地域を変えようとしています。', next:null },
+};
+
+function updatePhasePill(){
+  const p = gPhase();
+  const pi = PHASE_INFO[p];
+  const pill = document.getElementById('phase-pill');
+  if(pill){ pill.textContent = pi.label; pill.className = `phase-pill ${pi.cls}`; }
 }
 
-function badge(){
-  const n = ga().length;
-  document.getElementById('hdr-badge').textContent = `${n}件蓄積`;
-}
-
-function go(v){
-  ['today','log','draft','tmpl','cfg'].forEach(id=>{
-    document.getElementById(`nb-${id}`).classList.toggle('on', id===v);
+// ── API ────────────────────────────────────
+async function callClaude(messages, system, maxTokens=800){
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':gk(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,system,messages})
   });
-  const c = document.getElementById('content');
-  c.className='content fi';
-  c.innerHTML='';
+  const data = await res.json();
+  if(data.error) throw new Error(data.error.message);
+  return data.content?.find(b=>b.type==='text')?.text||'';
+}
+
+// ── Utils ──────────────────────────────────
+function toast(msg){
+  document.getElementById('_t')?.remove();
+  const t=Object.assign(document.createElement('div'),{id:'_t',className:'toast',textContent:msg});
+  document.body.appendChild(t); setTimeout(()=>t.remove(),2200);
+}
+function key(){ return new Date().toISOString().slice(0,10); }
+function go(v){
+  ['today','log','draft','tmpl','cfg'].forEach(id=>document.getElementById(`nb-${id}`).classList.toggle('on',id===v));
+  const c=document.getElementById('content');
+  c.className='content fi'; c.innerHTML='';
   ({today:rToday,log:rLog,draft:rDraft,tmpl:rTmpl,cfg:rCfg})[v](c);
-  badge();
+  updatePhasePill();
 }
 
-// ── TODAY ─────────────────────────────────────
+// ── TODAY (Chat) ───────────────────────────
 function rToday(el){
-  const today=key(), q=qfor(today);
-  const ans=ga().find(a=>a.date===today);
+  const p = gPhase();
+  const pi = PHASE_INFO[p];
+  const cnt = gCount();
+  const notifHtml = checkPhaseNotif(p, cnt);
 
-  el.innerHTML=`
-    <div class="dlabel">${today}</div>
-    <div class="qcard"><span class="qm">Q</span><p class="qt">${q}</p></div>
-    <div id="_aa"></div><div id="_hint"></div>`;
+  el.innerHTML = `
+    ${notifHtml}
+    <div class="phase-banner p${p}">
+      <div class="pb-title" style="color:${p===1?'#7ab87a':p===2?'#7a9ab8':'var(--gold)'}">${pi.title}</div>
+      <div class="pb-desc">${pi.desc}</div>
+    </div>
+    <div class="dlabel">${key()} — AIと対話しながらネタを掘り下げる</div>
+    <div class="chat-wrap" id="chat-wrap">
+      <div class="bubble thinking"><span class="dot">•</span><span class="dot">•</span><span class="dot">•</span></div>
+    </div>
+    <div class="input-row">
+      <textarea class="chat-input" id="chat-in" rows="2" placeholder="現場の言葉で答えてください..."></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendChat()" disabled>↑</button>
+    </div>
+    <div class="save-session" id="save-wrap" style="display:none">
+      <span>この会話をログに保存できます</span>
+      <button class="btn-o sm" onclick="saveSession()">保存する</button>
+    </div>`;
 
-  const aa=document.getElementById('_aa');
-  const hn=document.getElementById('_hint');
+  const inp = document.getElementById('chat-in');
+  inp.addEventListener('input',()=>{ document.getElementById('send-btn').disabled=!inp.value.trim(); });
+  inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); if(!inp.value.trim()) return; sendChat(); } });
 
-  if(ans){
-    aa.innerHTML=`
-      <div class="done">
-        <span class="done-ck">✓</span>
-        <span style="flex:1;font-size:11px">今日の回答を記録しました</span>
-        <button class="btn-o sm" id="_redo">書き直す</button>
-      </div>
-      <div class="done-ans">${ans.answer.replace(/\n/g,'<br>')}</div>`;
-    document.getElementById('_redo').onclick=()=>{
-      sa(ga().filter(a=>a.date!==today)); go('today');
-    };
-  } else {
-    aa.innerHTML=`
-      <textarea id="_ai" rows="6" placeholder="短くてOK。話し言葉・箇条書き、なんでも。&#10;現場の言葉で書いてください。"></textarea>
-      <button class="btn" id="_sb" disabled>記録する</button>`;
-    const inp=document.getElementById('_ai');
-    inp.addEventListener('input',()=>document.getElementById('_sb').disabled=!inp.value.trim());
-    document.getElementById('_sb').onclick=()=>{
-      if(!inp.value.trim()) return;
-      const arr=ga().filter(a=>a.date!==today);
-      arr.unshift({date:today,question:q,answer:inp.value.trim()});
-      sa(arr); toast('記録しました ✓'); go('today');
-    };
-  }
-
-  const cnt=ga().length;
-  if(cnt>=3) hn.innerHTML=`<div class="hint">💡 ${cnt}件溜まっています。「記事」タブで下書きを生成できます。</div>`;
+  chatHistory = [];
+  startChat(p);
 }
 
-// ── LOG ───────────────────────────────────────
+function checkPhaseNotif(p, cnt){
+  const pi = PHASE_INFO[p];
+  if(!pi.next) return '';
+  const remaining = pi.next - cnt;
+  if(remaining <= 0 && p < 3){
+    return `<div class="notif">🎉 ${cnt}本投稿達成！Phase ${p+1}に進むタイミングです。「設定」からフェーズを切り替えてみてください。</div>`;
+  }
+  if(remaining <= 2 && remaining > 0){
+    return `<div class="notif">📌 あと${remaining}本でPhase ${p+1}に進むタイミングです。</div>`;
+  }
+  return '';
+}
+
+async function startChat(phase){
+  if(!gk()){ addBubble('ai','まず「設定」タブでAPIキーを入力してください。'); return; }
+  const systemPrompt = buildSystemPrompt(phase);
+  const openMsg = await callClaude([], systemPrompt, 300).catch(()=>'今日はどんな現場のことを話しましょうか？');
+  chatHistory.push({role:'assistant', content:openMsg});
+  renderChat();
+}
+
+async function sendChat(){
+  const inp = document.getElementById('chat-in');
+  const text = inp.value.trim(); if(!text) return;
+  inp.value=''; document.getElementById('send-btn').disabled=true;
+
+  chatHistory.push({role:'user', content:text});
+  renderChat();
+  showTyping();
+
+  const systemPrompt = buildSystemPrompt(gPhase());
+  const reply = await callClaude(chatHistory, systemPrompt, 400).catch(()=>'ありがとうございます。もう少し詳しく聞かせてもらえますか？');
+  chatHistory.push({role:'assistant', content:reply});
+  renderChat();
+  document.getElementById('send-btn').disabled=false;
+
+  if(chatHistory.length >= 4){
+    const sw = document.getElementById('save-wrap');
+    if(sw) sw.style.display='flex';
+  }
+}
+
+function buildSystemPrompt(phase){
+  const pi = PHASE_INFO[phase];
+  const profiles = { 1:'障害福祉事業所（116名）を運営しながらGAS/Supabase/Firebase/Claude APIで業務システムを自作している実務家。移動支援・スケジュール管理・AI記録整形などを現場で実運用中。', 2:'システム設計の意思決定・なぜSupabaseか・なぜAIを補助にしたか・現場都合の設計哲学を持つ実務家。', 3:'介護FC展開・音楽活動・街づくり7年構想・世界展開を視野に入れる現場発の起業家。' };
+  const focus = { 1:'現場の失敗・工夫・今日起きたこと・手作業が残っている部分・ヘルパーとの現場あるある', 2:'設計の意思決定の背景・なぜその技術を選んだか・現場都合で妥協した点・理想と現実のギャップ', 3:'FC展開の構想・地域への想い・音楽と介護の接点・街づくりのビジョン・世界展開への考え' };
+  return `あなたは翼さん（${profiles[phase]}）のnote記事制作を助けるインタビュアーです。
+
+【現在のフェーズ】${pi.title}
+【質問の焦点】${focus[phase]}
+
+ルール：
+- 1回のメッセージで質問は1つだけ
+- 短く具体的な質問をする（30文字以内が理想）
+- 「すごい」「素晴らしい」などの褒め言葉は使わない
+- 答えが浅い時は「もう少し具体的に教えてください」と深掘りする
+- 答えが十分深まったら「今日はありがとうございました。ログに保存しておきましょう。」で締める
+- 最初のメッセージは今日の質問を1つ投げかけるところから始める`;
+}
+
+function addBubble(type, text){ chatHistory.push({role:type==='ai'?'assistant':'user', content:text}); renderChat(); }
+function showTyping(){
+  const cw = document.getElementById('chat-wrap'); if(!cw) return;
+  const b = document.createElement('div');
+  b.className='bubble thinking'; b.id='typing';
+  b.innerHTML='<span class="dot">•</span><span class="dot">•</span><span class="dot">•</span>';
+  cw.appendChild(b); cw.scrollTop=cw.scrollHeight;
+}
+function renderChat(){
+  const cw = document.getElementById('chat-wrap'); if(!cw) return;
+  cw.innerHTML = chatHistory.map(m=>`
+    <div class="bubble ${m.role==='assistant'?'ai':'user'}">${m.content.replace(/\n/g,'<br>')}</div>
+  `).join('');
+  cw.scrollTop=cw.scrollHeight;
+}
+function saveSession(){
+  if(chatHistory.length < 2) return;
+  const q = chatHistory[0]?.content||'AIとの対話';
+  const ans = chatHistory.filter(m=>m.role==='user').map(m=>m.content).join('\n');
+  const arr = ga().filter(a=>a.date!==key());
+  arr.unshift({date:key(), question:q, answer:ans, phase:gPhase(), chat:chatHistory});
+  sa(arr); toast('ログに保存しました ✓');
+  document.getElementById('save-wrap').style.display='none';
+}
+
+// ── LOG ────────────────────────────────────
 function rLog(el){
   const arr=ga();
   if(!arr.length){ el.innerHTML=`<div class="empty">まだ記録がありません。<br>「今日」タブから始めてください。</div>`; return; }
@@ -360,185 +385,184 @@ function rLog(el){
     <div class="lcard">
       <div class="lmeta">
         <span class="ldate">${a.date}</span>
-        <button class="btn-o sm" onclick="delA('${a.date}')">削除</button>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="lphase">Phase ${a.phase||1}</span>
+          <button class="btn-o sm" onclick="delA('${a.date}')">削除</button>
+        </div>
       </div>
       <p class="lq">${a.question}</p>
       <p class="la">${a.answer.replace(/\n/g,'<br>')}</p>
     </div>`).join('');
 }
-function delA(date){
-  sa(ga().filter(a=>a.date!==date)); toast('削除しました'); go('log');
-}
+function delA(date){ sa(ga().filter(a=>a.date!==date)); toast('削除しました'); go('log'); }
 
-// ── DRAFT ────────────────────────────────────
+// ── DRAFT ──────────────────────────────────
+let selectedLength='medium';
+let selectedTitle='';
+
 function rDraft(el){
   const cnt=ga().length;
-  const hasDraft=gd();
-  const hasKey=gk();
-
   el.innerHTML=`
     <div class="tab-bar">
       <button class="tab on" id="tab-gen" onclick="draftTab('gen')">生成</button>
       <button class="tab" id="tab-edit" onclick="draftTab('edit')">編集・投稿</button>
     </div>
     <div id="_dtab"></div>`;
-
-  draftTab(hasDraft?'edit':'gen');
+  draftTab(gd()?'edit':'gen');
 }
 
 function draftTab(t){
-  ['gen','edit'].forEach(id=>{
-    document.getElementById(`tab-${id}`)?.classList.toggle('on', id===t);
-  });
-  const wrap=document.getElementById('_dtab');
-  if(!wrap) return;
-  if(t==='gen') renderGen(wrap);
-  else renderEdit(wrap);
+  ['gen','edit'].forEach(id=>document.getElementById(`tab-${id}`)?.classList.toggle('on',id===t));
+  const wrap=document.getElementById('_dtab'); if(!wrap) return;
+  t==='gen'?renderGen(wrap):renderEdit(wrap);
 }
 
 function renderGen(el){
+  if(!gk()){ el.innerHTML=`<div class="empty">APIキーが設定されていません。<br>「設定」タブで入力してください。</div>`; return; }
   const cnt=ga().length;
-  const hasKey=gk();
-  if(!hasKey){
-    el.innerHTML=`<div class="empty">APIキーが設定されていません。<br>「設定」タブで入力してください。</div>`; return;
-  }
-  if(cnt<3){
-    el.innerHTML=`<div class="empty">記事生成には3件以上の記録が必要です。<br>あと${3-cnt}件答えてください。</div>`; return;
-  }
+  if(cnt<2){ el.innerHTML=`<div class="empty">記事生成には2件以上の記録が必要です。<br>あと${2-cnt}件答えてください。</div>`; return; }
   el.innerHTML=`
-    <p class="slabel" style="margin-bottom:14px">直近${Math.min(cnt,7)}件のログから記事を生成します</p>
-    <button class="btn" id="_gb" style="margin-top:0" onclick="generate()">✦ 記事ドラフトを生成する</button>
+    <div class="slabel">記事の長さ</div>
+    <div class="length-row" id="len-row">
+      <button class="btn-o ${selectedLength==='short'?'active':''}" onclick="setLen('short')">短め<br><span style="font-size:9px;color:var(--dim)">300〜500文字</span></button>
+      <button class="btn-o ${selectedLength==='medium'?'active':''}" onclick="setLen('medium')">標準<br><span style="font-size:9px;color:var(--dim)">600〜900文字</span></button>
+      <button class="btn-o ${selectedLength==='long'?'active':''}" onclick="setLen('long')">長め<br><span style="font-size:9px;color:var(--dim)">1000〜1500文字</span></button>
+    </div>
+    <button class="btn" style="margin-top:0" id="_gb" onclick="generate()">✦ 記事・タイトル・タグを一括生成</button>
     <div id="_gout"></div>`;
-  if(gd()) showGenPreview(document.getElementById('_gout'), gd());
+  if(gd()) renderGenPreview(document.getElementById('_gout'));
 }
 
-function showGenPreview(el, text){
+function setLen(l){
+  selectedLength=l;
+  document.querySelectorAll('#len-row .btn-o').forEach((b,i)=>{ b.classList.toggle('active',['short','medium','long'][i]===l); });
+}
+
+function renderGenPreview(el){
+  const titles=gTitle()?[gTitle()]:[]; const tags=gTags();
   el.innerHTML=`
-    <div style="margin-top:14px;background:var(--s1);border:1px solid var(--border)">
-      <div style="padding:9px 13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:10px;color:var(--dim);letter-spacing:.1em">生成済み下書き</span>
-        <button class="btn-o sm" onclick="draftTab('edit')">編集・投稿へ →</button>
+    <div class="draft-out">
+      ${titles.length?`<div class="slabel" style="margin-top:14px">選択中のタイトル</div><div style="font-size:12px;color:var(--gold);padding:8px 0">${titles[0]}</div>`:''}
+      ${tags.length?`<div class="tag-wrap">${tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`:''}
+      <div class="draft-box" style="margin-top:12px">
+        <div class="draft-hdr"><span style="font-size:10px;color:var(--dim)">下書き（生成済み）</span><button class="btn-o sm" onclick="draftTab('edit')">編集へ →</button></div>
+        <div class="draft-txt">${gd().slice(0,300).replace(/</g,'&lt;').replace(/>/g,'&gt;')}...</div>
       </div>
-      <div style="padding:14px;font-size:11px;color:#888;line-height:1.9;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-word">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,400)}...</div>
     </div>`;
 }
 
 async function generate(){
-  const btn=document.getElementById('_gb');
-  const out=document.getElementById('_gout');
+  const btn=document.getElementById('_gb'); const out=document.getElementById('_gout');
   btn.disabled=true; btn.textContent='生成中...';
-  out.innerHTML=`<div class="gen-msg" id="_gdots">現場ログを記事に変換しています<span id="_dt"></span></div>`;
-  let d=0; const ti=setInterval(()=>{ const el=document.getElementById('_dt'); if(el) el.textContent='.'.repeat((d++%3)+1); },500);
+  out.innerHTML=`<div class="gen-msg">記事・タイトル・タグを生成しています<span id="_dots"></span></div>`;
+  let d=0; const ti=setInterval(()=>{ const el=document.getElementById('_dots'); if(el) el.textContent='.'.repeat((d++%3)+1); },500);
 
   const ctx=ga().slice(0,7).map(a=>`【質問】${a.question}\n【回答】${a.answer}`).join('\n\n');
+  const lenMap={short:'300〜500文字',medium:'600〜900文字',long:'1000〜1500文字'};
+  const p=gPhase(); const pi=PHASE_INFO[p];
+
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':gk(),
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:`あなたは障害福祉事業所を運営しながらGAS/Supabase/Firebase/Claude APIでシステムを自作している実務家の文章を書くアシスタントです。
-技術自慢にならず、現場のリアルを軸にした「現場ログ型」のnote記事ドラフトを書いてください。
-・冒頭は現場の一場面から入る（感情より事実で）
-・AIや技術は補助として描く（主役は現場）
+    const system=`あなたは障害福祉事業所を運営しながらGAS/Supabase/Firebase/Claude APIでシステムを自作している実務家の文章を書くアシスタントです。
+【現在のフェーズ】${pi.title} — ${pi.desc}
+以下のJSON形式のみで返してください（Markdownのコードブロック不要）：
+{"article":"記事本文(Markdown)","titles":["タイトル案1","タイトル案2","タイトル案3"],"tags":["#タグ1","#タグ2","#タグ3","#タグ4","#タグ5"]}
+記事のルール：
+・冒頭は現場の一場面から入る
+・AIや技術は補助として描く
 ・失敗・課題も正直に書く
-・「なぜその設計にしたか」の意思決定を含める
-・600〜900文字程度
-・Markdown形式、タイトルも含める（#で始める）`,
-        messages:[{role:'user',content:`以下の現場メモをもとに、note記事のドラフトを書いてください。\n\n${ctx}`}]
-      })
-    });
-    const data=await res.json();
+・${lenMap[selectedLength]}程度
+・タイトルは感情や具体性を含む（「〜した話」「〜で起きたこと」形式）
+・タグはnoteで検索されやすいもの`;
+
+    const text=await callClaude([{role:'user',content:`以下の現場メモをもとに記事・タイトル3案・タグを生成してください。\n\n${ctx}`}],system,1500);
     clearInterval(ti);
-    if(data.error){ out.innerHTML=`<div class="err">エラー: ${data.error.message}</div>`; return; }
-    const text=data.content?.find(b=>b.type==='text')?.text||'生成に失敗しました。';
-    sd(text);
-    showGenPreview(out, text);
-    toast('生成完了！「編集・投稿」で確認できます');
-  } catch(e){
+
+    let parsed;
+    try{ parsed=JSON.parse(text); }
+    catch{ const m=text.match(/\{[\s\S]*\}/); parsed=m?JSON.parse(m[0]):null; }
+
+    if(!parsed) throw new Error('JSONパースエラー');
+    sd(parsed.article||'');
+    sTitle(parsed.titles?.[0]||'');
+    sTags(parsed.tags||[]);
+
+    out.innerHTML=`
+      <div class="draft-out">
+        <div class="slabel" style="margin-top:14px">タイトル候補（タップして選択）</div>
+        <div class="title-list">${(parsed.titles||[]).map((t,i)=>`
+          <div class="title-item ${i===0?'selected':''}" onclick="selectTitle(this,'${t.replace(/'/g,"\\'")}')">
+            <span>${t}</span><span style="font-size:10px;color:var(--dim);flex-shrink:0">${i===0?'✓':''}</span>
+          </div>`).join('')}</div>
+        <div class="slabel" style="margin-top:14px">ハッシュタグ（タップでコピー）</div>
+        <div class="tag-wrap">${(parsed.tags||[]).map(t=>`<span class="tag" onclick="navigator.clipboard.writeText('${t}').then(()=>showToast('コピーしました'))">${t}</span>`).join('')}</div>
+        <div class="slabel" style="margin-top:14px">本文プレビュー</div>
+        <div class="draft-box">
+          <div class="draft-hdr"><span style="font-size:10px;color:var(--dim)">下書き</span><button class="btn-o sm" onclick="draftTab('edit')">編集・投稿へ →</button></div>
+          <div class="draft-txt">${(parsed.article||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,400)}...</div>
+        </div>
+      </div>`;
+    toast('生成完了！');
+  }catch(e){
     clearInterval(ti);
-    out.innerHTML=`<div class="err">エラーが発生しました。APIキーとネットワークを確認してください。</div>`;
-  } finally{
-    btn.disabled=false; btn.textContent='✦ 記事ドラフトを生成する';
+    out.innerHTML=`<div class="err">エラー: ${e.message}</div>`;
+  }finally{
+    btn.disabled=false; btn.textContent='✦ 記事・タイトル・タグを一括生成';
   }
 }
 
-function renderEdit(el){
-  const draft=gd();
-  const tmpls=gt();
+function selectTitle(el, title){
+  document.querySelectorAll('.title-item').forEach(e=>{ e.classList.remove('selected'); e.querySelector('span:last-child').textContent=''; });
+  el.classList.add('selected'); el.querySelector('span:last-child').textContent='✓';
+  sTitle(title); toast('タイトルを選択しました');
+}
+function showToast(m){ toast(m); }
 
+function renderEdit(el){
+  const tmpls=gt(); const tags=gTags(); const title=gTitle();
   el.innerHTML=`
+    ${title?`<div style="margin-bottom:12px"><div class="slabel">タイトル</div><div style="font-size:13px;color:var(--gold);padding:8px 12px;background:var(--s1);border:1px solid var(--border)">${title}</div></div>`:''}
+    ${tags.length?`<div style="margin-bottom:14px"><div class="slabel">タグ（タップでコピー）</div><div class="tag-wrap">${tags.map(t=>`<span class="tag" onclick="navigator.clipboard.writeText('${t}').then(()=>toast('コピーしました'))">${t}</span>`).join('')}</div></div>`:''}
     <div class="slabel">定型文を挿入</div>
-    <div id="_tbtns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
-      ${tmpls.map(t=>`<button class="btn-o" onclick="insertTmpl('${t.id}')" style="font-size:10px;padding:5px 10px">${t.name}</button>`).join('')}
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+      ${tmpls.map(t=>`<button class="btn-o" onclick="insertTmpl('${t.id}')" style="font-size:10px;padding:4px 9px">${t.name}</button>`).join('')}
     </div>
     <div class="slabel">本文エディタ</div>
-    <textarea class="editor-area" id="_edt" rows="14" placeholder="ここに記事を書く・編集する...">${draft.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
-    <div class="char-count" id="_cc">${draft.length}文字</div>
+    <textarea class="editor-area" id="_edt" rows="12">${gd().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</textarea>
+    <div class="char-count" id="_cc">${gd().length}文字</div>
     <div class="editor-actions">
       <button class="btn" style="flex:1;margin-top:0" onclick="copyAll()">📋 全文コピー</button>
-      <button class="btn-o" style="margin-top:0;padding:12px 16px" onclick="clearDraft()">クリア</button>
+      <button class="btn-o" style="margin-top:0;padding:12px 14px" onclick="clearDraft()">クリア</button>
     </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--dim);line-height:1.8;padding:9px 12px;background:var(--s1);border:1px solid var(--border)">
-      📌 コピー後、noteのエディタに貼り付けるだけで完成。<br>見出し(#)・箇条書き(-)が自動で装飾されます。
+    <div style="margin-top:10px;padding:9px 12px;background:var(--s1);border:1px solid var(--border);font-size:10px;color:var(--dim);line-height:1.8">
+      📌 コピー後、noteに貼り付けるだけ。Markdown(#・-)が自動で装飾されます。
     </div>`;
-
   const edt=document.getElementById('_edt');
-  edt.addEventListener('input',()=>{
-    sd(edt.value);
-    document.getElementById('_cc').textContent=`${edt.value.length}文字`;
-  });
+  edt.addEventListener('input',()=>{ sd(edt.value); document.getElementById('_cc').textContent=`${edt.value.length}文字`; });
 }
 
 function insertTmpl(id){
   const t=gt().find(x=>x.id===id); if(!t) return;
   const edt=document.getElementById('_edt'); if(!edt) return;
-  const pos=edt.selectionEnd;
-  const v=edt.value;
+  const pos=edt.selectionEnd; const v=edt.value;
   edt.value=v.slice(0,pos)+'\n'+t.body+'\n'+v.slice(pos);
-  sd(edt.value);
-  document.getElementById('_cc').textContent=`${edt.value.length}文字`;
+  sd(edt.value); document.getElementById('_cc').textContent=`${edt.value.length}文字`;
   toast(`「${t.name}」を挿入しました`);
 }
+function copyAll(){ const edt=document.getElementById('_edt'); if(!edt) return; navigator.clipboard.writeText(edt.value).then(()=>toast('全文コピーしました ✓')); }
+function clearDraft(){ if(!confirm('下書きをクリアしますか？')) return; sd(''); sTitle(''); sTags([]); go('draft'); }
 
-function copyAll(){
-  const edt=document.getElementById('_edt'); if(!edt) return;
-  navigator.clipboard.writeText(edt.value).then(()=>toast('全文コピーしました ✓'));
-}
-
-function clearDraft(){
-  if(!confirm('下書きをクリアしますか？')) return;
-  sd('');
-  go('draft');
-}
-
-// ── TEMPLATES ────────────────────────────────
+// ── TEMPLATES ──────────────────────────────
 function rTmpl(el){
-  const tmpls=gt();
-  el.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <span class="slabel" style="margin:0">定型文一覧</span>
-      <button class="btn-o sm" onclick="newTmpl()">＋ 追加</button>
-    </div>
-    <div id="_tlist"></div>`;
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span class="slabel" style="margin:0">定型文</span><button class="btn-o sm" onclick="newTmpl()">＋ 追加</button></div><div id="_tlist"></div>`;
   renderTlist();
 }
-
 function renderTlist(){
   const el=document.getElementById('_tlist'); if(!el) return;
   const tmpls=gt();
-  if(!tmpls.length){ el.innerHTML=`<div class="empty">定型文がありません。<br>「＋ 追加」から作成してください。</div>`; return; }
+  if(!tmpls.length){ el.innerHTML=`<div class="empty">定型文がありません。</div>`; return; }
   el.innerHTML=tmpls.map(t=>`
     <div class="tcard">
-      <div class="tcard-hd">
-        <span class="tcard-name">${t.name}</span>
-      </div>
+      <div class="tcard-hd"><span class="tcard-name">${t.name}</span></div>
       <p class="tcard-body">${t.body.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
       <div class="tcard-actions">
         <button class="btn-o sm" onclick="editTmpl('${t.id}')">編集</button>
@@ -546,61 +570,62 @@ function renderTlist(){
       </div>
     </div>`).join('');
 }
+function newTmpl(){ const name=prompt('定型文の名前:'); if(!name) return; const body=prompt('内容:'); if(!body) return; const tmpls=gt(); tmpls.push({id:'t'+Date.now(),name,body}); stmpls(tmpls); renderTlist(); toast('追加しました ✓'); }
+function editTmpl(id){ const tmpls=gt(); const t=tmpls.find(x=>x.id===id); if(!t) return; const name=prompt('名前:',t.name); if(name===null) return; const body=prompt('内容:',t.body); if(body===null) return; t.name=name; t.body=body; stmpls(tmpls); renderTlist(); toast('更新しました ✓'); }
+function delTmpl(id){ if(!confirm('削除しますか？')) return; stmpls(gt().filter(t=>t.id!==id)); renderTlist(); toast('削除しました'); }
 
-function newTmpl(){
-  const name=prompt('定型文の名前を入力してください:'); if(!name) return;
-  const body=prompt('内容を入力してください（改行はそのまま入力）:'); if(!body) return;
-  const tmpls=gt();
-  tmpls.push({id:'t'+Date.now(), name, body});
-  stmpls(tmpls); renderTlist(); toast('追加しました ✓');
-}
-
-function editTmpl(id){
-  const tmpls=gt(); const t=tmpls.find(x=>x.id===id); if(!t) return;
-  const name=prompt('名前:', t.name); if(name===null) return;
-  const body=prompt('内容:', t.body); if(body===null) return;
-  t.name=name; t.body=body;
-  stmpls(tmpls); renderTlist(); toast('更新しました ✓');
-}
-
-function delTmpl(id){
-  if(!confirm('この定型文を削除しますか？')) return;
-  stmpls(gt().filter(t=>t.id!==id)); renderTlist(); toast('削除しました');
-}
-
-// ── CONFIG ───────────────────────────────────
+// ── CONFIG ─────────────────────────────────
 function rCfg(el){
+  const p=gPhase(); const cnt=gCount(); const pi=PHASE_INFO[p];
   el.innerHTML=`
     <div class="sg">
+      <label class="sgl">現在のフェーズ</label>
+      <div class="phase-sel">
+        ${[1,2,3].map(n=>`<div class="pcard ${p===n?'sel':''}" onclick="setPhase(${n})">
+          <div class="pcard-num">${n}</div>
+          <div class="pcard-label">${PHASE_INFO[n].title}</div>
+        </div>`).join('')}
+      </div>
+      <div style="font-size:11px;color:var(--sub);line-height:1.7;padding:10px 12px;background:var(--s1);border:1px solid var(--border);margin-top:8px">
+        <strong style="color:var(--gold)">Phase ${p}のプロフィール文：</strong><br>${pi.profile}
+      </div>
+    </div>
+    <hr>
+    <div class="sg">
+      <label class="sgl">投稿カウンター</label>
+      <div class="counter-wrap">
+        <div class="counter-num">${cnt}</div>
+        <div class="counter-label">投稿済み記事数</div>
+        <div class="counter-btns">
+          <button class="btn-o wide" style="margin:0;flex:1" onclick="incCount()">＋1 投稿した</button>
+          <button class="btn-o" style="padding:10px 14px" onclick="if(confirm('カウントをリセットしますか？')){sCount(0);go('cfg')}">リセット</button>
+        </div>
+        ${pi.next?`<div class="counter-milestone">Phase ${p+1}まであと <strong style="color:var(--gold)">${Math.max(0,pi.next-cnt)}</strong> 本</div>`:'<div class="counter-milestone" style="color:var(--gold)">最終フェーズ到達！</div>'}
+      </div>
+    </div>
+    <hr>
+    <div class="sg">
       <label class="sgl">ANTHROPIC API KEY</label>
-      <input type="password" id="_ak" value="${gk()}" placeholder="sk-ant-..." autocomplete="off" autocorrect="off" spellcheck="false">
+      <input type="password" class="api-input" id="_ak" value="${gk()}" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
       <button class="btn" onclick="const v=document.getElementById('_ak').value.trim();localStorage.setItem('gl-key',v);toast('保存しました ✓')">保存する</button>
     </div>
     <hr>
     <div class="sg">
       <label class="sgl">データ管理</label>
       <button class="btn-o wide" onclick="exportData()">ログをエクスポート（JSON）</button>
-      <button class="btn-o wide danger" onclick="if(confirm('全データを削除しますか？')){['gl-a','gl-draft','gl-tmpl'].forEach(k=>localStorage.removeItem(k));toast('削除しました');go('today')}">全データを削除</button>
+      <button class="btn-o wide danger" onclick="if(confirm('全データを削除しますか？')){['gl-a','gl-draft','gl-tmpl','gl-title','gl-tags'].forEach(k=>localStorage.removeItem(k));toast('削除しました');go('today')}">全データを削除</button>
     </div>
-    <hr>
-    <div class="si">
-      現場ログ v2.0<br>
-      APIキーはこの端末にのみ保存されます。<br>
-      記事生成1回あたり数円程度の費用が発生します。<br><br>
-      ないものは、作ればいい。— 奥原翼
+    <div style="font-size:10px;color:#2a2a2a;line-height:1.8;margin-top:16px;text-align:center">
+      現場ログ v3.0 — ないものは、作ればいい。
     </div>`;
 }
 
-function exportData(){
-  const blob=new Blob([JSON.stringify({answers:ga(),draft:gd(),exported:new Date().toISOString()},null,2)],{type:'application/json'});
-  const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`genba-log-${key()}.json`});
-  a.click();
-}
+function setPhase(n){ sPhase(n); toast(`Phase ${n}に切り替えました`); go('cfg'); }
+function incCount(){ sCount(gCount()+1); toast('投稿数を更新しました ✓'); go('cfg'); }
+function exportData(){ const blob=new Blob([JSON.stringify({answers:ga(),draft:gd(),phase:gPhase(),count:gCount(),exported:new Date().toISOString()},null,2)],{type:'application/json'}); const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`genba-log-${key()}.json`}); a.click(); }
 
-// SW
+// SW + Init
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-
-// Init
 go('today');
 </script>
 </body>
