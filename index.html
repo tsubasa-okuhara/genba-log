@@ -217,6 +217,12 @@ if(!localStorage.getItem('gl-tmpl')) stmpls(DEFAULT_TEMPLATES);
 let chatHistory = [];
 let chatSaving = false;
 
+// Auto-save chat
+const CHAT_DRAFT_KEY = 'gl-chat-draft';
+function saveChatDraft(){ try{ localStorage.setItem(CHAT_DRAFT_KEY, JSON.stringify({date:key(),history:chatHistory})); }catch{} }
+function loadChatDraft(){ try{ const d=JSON.parse(localStorage.getItem(CHAT_DRAFT_KEY)||'null'); return (d&&d.date===key())?d.history:null; }catch{ return null; } }
+function clearChatDraft(){ localStorage.removeItem(CHAT_DRAFT_KEY); }
+
 // ── Phase info ──────────────────────────────
 const PHASE_INFO = {
   1: { label:'Phase 1', cls:'phase-1', title:'現場運営 × 自作システム', desc:'現場の失敗・工夫・仕組みを正直に書く。「この人、本当に現場やってる」を伝える段階。', profile:'障害福祉事業所を運営しながら、現場で使えるシステムを自分で作っています。GAS / Supabase / AI を使った福祉DXを、現場目線で試行錯誤中。', next:5 },
@@ -288,8 +294,25 @@ function rToday(el){
   inp.addEventListener('input',()=>{ document.getElementById('send-btn').disabled=!inp.value.trim(); });
   inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); if(!inp.value.trim()) return; sendChat(); } });
 
-  chatHistory = [];
-  startChat(p);
+  const draft = loadChatDraft();
+  if(draft && draft.length > 0){
+    chatHistory = draft;
+    renderChat();
+    const cw = document.getElementById('chat-wrap');
+    if(cw){
+      const banner = document.createElement('div');
+      banner.style.cssText='font-size:11px;color:var(--gold);text-align:center;padding:8px;border:1px solid #3a2e18;background:#1a1408;margin-bottom:8px';
+      banner.textContent='⟳ 前回の続きから再開しています';
+      cw.prepend(banner);
+    }
+    if(chatHistory.length >= 4){
+      const sw = document.getElementById('save-wrap');
+      if(sw) sw.style.display='flex';
+    }
+  } else {
+    chatHistory = [];
+    startChat(p);
+  }
 }
 
 function checkPhaseNotif(p, cnt){
@@ -326,6 +349,7 @@ async function sendChat(){
   const reply = await callClaude(chatHistory, systemPrompt, 400).catch(()=>'ありがとうございます。もう少し詳しく聞かせてもらえますか？');
   chatHistory.push({role:'assistant', content:reply});
   renderChat();
+  saveChatDraft();
   document.getElementById('send-btn').disabled=false;
 
   if(chatHistory.length >= 4){
@@ -374,6 +398,7 @@ function saveSession(){
   const arr = ga().filter(a=>a.date!==key());
   arr.unshift({date:key(), question:q, answer:ans, phase:gPhase(), chat:chatHistory});
   sa(arr); toast('ログに保存しました ✓');
+  clearChatDraft();
   document.getElementById('save-wrap').style.display='none';
 }
 
